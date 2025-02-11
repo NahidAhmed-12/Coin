@@ -19,14 +19,14 @@
         }
         .coin-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
             gap: 15px;
             max-width: 90%;
             margin: auto;
         }
         .coin-card {
             background: #1E1E1E;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 15px;
             text-align: center;
             transition: 0.3s;
@@ -59,14 +59,18 @@
             font-size: 14.3px;
             color: #F0B90B;
         }
-        .coin-card.top-gainer::after {
-            content: '🔥';
-            position: absolute;
-            top: 10px;
-            right:10px;
-            font-size: 24px;
-            color: red;
-        }
+.coin-card.top-gainer::after {
+    content: ""; /* এটি খালি রাখতে হবে */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 27px;  /* ইমেজের প্রস্থ */
+    height: 27px; /* ইমেজের উচ্চতা */
+    background-image: url('flames.png'); /* PNG ইমেজের লিংক দিন */
+    background-size: cover; /* ইমেজ পুরোপুরি ফিট করানোর জন্য */
+    background-repeat: no-repeat;
+}
+
 
         /* Loading message */
         #loadingMessage {
@@ -79,58 +83,75 @@
             display: none;
         }
 
-        /* Pop-up Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(6px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-        }
-        .modal.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .modal-content {
-            position: relative;
-            background: rgba(30, 30, 30, 0.95);
-            padding: 20px;
-            width: 85%;
-            max-width: 750px;
-            text-align: center;
-            border-radius: 11px;
-            box-shadow: 0px 0px 15px rgba(240, 185, 11, 0.4);
-            border: 1px solid rgba(240, 185, 11, 0.2);
-        }
-        .close {
-            position: absolute;
-            top: 14px;
-            right: 16px;
-            font-size: 22px;
-            cursor: pointer;
-            color: #F0B90B;
-            background: rgba(240, 185, 11, 0.2);
-            border-radius: 50%;
-            padding: 5px 10px;
-            transition: 0.2s ease;
-        }
-        .close:hover {
-            background: rgba(240, 185, 11, 0.5);
-            color: white;
-        }
+
+
+/* Pop-up Modal */
+.modal {
+    display: flex;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none; /* বন্ধ থাকা অবস্থায় ক্লিক হবে না */
+    transition: opacity 0.5s ease-in-out;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events: all; /* ওপেন হলে ক্লিক কাজ করবে */
+}
+
+.modal-content {
+    position: relative;
+    background: rgba(30, 30, 30, 0.95);
+    padding: 20px;
+    width: 85%;
+    max-width: 750px;
+    text-align: center;
+    border-radius: 11px;
+    box-shadow: 0px 0px 15px rgba(240, 185, 11, 0.4);
+    border: 1px solid rgba(240, 185, 11, 0.2);
+    transform: translateY(-10px);
+    transition: transform 0.4s ease-in-out;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #F0B90B;
+    background: rgba(240, 185, 11, 0.2);
+    border-radius: 50%;
+    padding: 5px 10px;
+    transition: 0.2s ease;
+}
+.close:hover {
+    background: rgba(240, 185, 11, 0.5);
+    color: white;
+}
+
+
+
         #tradingview-widget {
             width: 100%;
             height: 500px;
             border-radius: 8px;
             background: #000;
         }
+
+
     </style>
 </head>
 <body>
@@ -226,56 +247,60 @@ function openChart(symbol) {
 
     // Initialize the TradingView widget with the new symbol
 new TradingView.widget({
-    "container_id": "tradingview-widget",
-    "symbol": tvSymbol,
-    "interval": "5",
-    "theme": "dark",
-    "style": "1",
-    "locale": "en",
-    "toolbar_bg": "#121212",
-    "hide_side_toolbar": true,
-    "allow_symbol_change": false,
-    "autosize": true,
-    "show_symbol_logo": false,
-    "show_interval": false,
-    "hide_top_toolbar": false,
-    "hide_legend": false,
-    "hide_price_scale": false,
-    "show_crosshair": true,
-    "timezone": "Asia/Dhaka",
-    "hide_volume": true,
-    "studies": [
-        {
-            "id": "MASimple@tv-basicstudies", // EMA 44
-            "inputs": {
-                "length": 44,
-                "source": "open" // Type সেট করলাম Open
-            },
-            "styles": {
-                "plot_0": {
-                    "color": "#0000FF", // নীল কালার
-                    "linestyle": 0,
-                    "linewidth": 2
-                }
-            }
+  "container_id": "tradingview-widget",
+  "symbol": tvSymbol,
+  "interval": "5",
+  "theme": "dark",
+  "style": "1",
+  "locale": "en",
+  "toolbar_bg": "#121212",
+  "hide_side_toolbar": true,
+  "allow_symbol_change": false,
+  "autosize": true,
+  "show_symbol_logo": false,
+  "show_interval": false,
+  "hide_top_toolbar": false,
+  "hide_legend": false,
+  "hide_price_scale": false,
+  "show_crosshair": true,
+  "timezone": "Asia/Dhaka",
+  "hide_volume": true,
+
+  "studies": [
+    {
+      "id": "MAExp@tv-basicstudies", // EMA 44
+      "inputs": {
+        "length": 44,
+        "source": "close", // à¦¸à§‹à¦°à§à¦¸ à¦ªà§à¦°à¦¾à¦‡à¦¸ (close, open, high, low)
+        "offset": 0
+      },
+      "styles": {
+        "plot_0": {
+          "color": "#CC33CC",// à¦²à¦¾à¦² à¦•à¦¾à¦²à¦¾à¦° (Red)
+          "linestyle": 0,
+          "linewidth": 8,
+        }
+      }
         },
-        {
-            "id": "MASimple@tv-basicstudies", // EMA 50
-            "inputs": {
-                "length": 50,
-                "source": "open" // Type সেট করলাম Open
-            },
-            "styles": {
-                "plot_0": {
-                    "color": "#FF0000", // লাল কালার
-                    "linestyle": 0,
-                    "linewidth": 2
-                }
-            }
+        
+        
+    {
+      "id": "MAExp@tv-basicstudies", // EMA 50
+      "inputs": {
+        "length": 50,
+        "source": "close", // à¦¸à§‹à¦°à§à¦¸ à¦ªà§à¦°à¦¾à¦‡à¦¸ (close, open, high, low)
+        "offset": 0
+      },
+      "styles": {
+        "plot_0": {
+          "color": "#0000FF", // à¦¨à§€à¦² à¦•à¦¾à¦²à¦¾à¦° (Blue)
+          "linestyle": 0,
+          "linewidth": 2,
+        }
+      }
         }
     ]
 });
-
     // Save the selected chart symbol to localStorage
     localStorage.setItem("currentChart", symbol);
 }
@@ -286,13 +311,7 @@ function closeModal() {
     chartModal.classList.remove("show");
 }
 
-// When the page loads, check if a chart was previously opened and load it
-window.onload = function() {
-    const savedChart = localStorage.getItem("currentChart");
-    if (savedChart) {
-        openChart(savedChart);
-    }
-};
+
 
 // Initial fetch and then update every 5 seconds
 fetchFuturesGainers();
