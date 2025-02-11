@@ -248,7 +248,7 @@ async function fetchFuturesGainers() {
 
     // Create a timeout promise that rejects after 4 seconds
     const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject('Timeout'), 1000)
+        setTimeout(() => reject('Timeout'), 500)
     );
 
     try {
