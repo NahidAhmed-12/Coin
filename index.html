@@ -170,17 +170,22 @@
             background: #F0B90B;
             color: #232323;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 17px;
             margin-bottom: 20px;
             transition: background 0.3s ease;
+            margin-right: 10px;
+            
         }
-        .toggle-button:hover {
+        .toggle-button:focus{
             background: #FF5733;
             color: #FFFFFF;
         }
+       
+        
+        
         /* Losses এর জন্য স্টাইল */
         .coin-card.loss .coin-logo {
             background-color: #ff6666;
@@ -196,7 +201,10 @@
 <h2>Futures <span style="color: #ff5733">Top</span> <span id="toggleText">Gainers</span> <br /> <br /><span></span></h2>
 
 <!-- Toggle Button -->
-<button class="toggle-button" id="toggleButton">Show Losses</button>
+<button style="padding: 10px 25px; gap: 15px;" class="toggle-button" id="toggleButton"><i class="fa-solid fa-chart-line"></i> </button>
+
+<!-- Auto Show Button -->
+<button class="toggle-button" id="autoShowButton"><i class="fa-solid fa-robot"></i> </button>
 
 <!-- Loading message -->
 <div id="loadingMessage">Loading...</div>
@@ -221,6 +229,8 @@
 
 <script>
 let showGainers = true;
+let autoShowInterval = null;
+let currentIndex = 0;
 
 async function fetchFuturesData() {
     const loadingMessage = document.getElementById("loadingMessage");
@@ -283,8 +293,38 @@ async function fetchFuturesData() {
 function toggleData() {
     showGainers = !showGainers;
     document.getElementById("toggleText").innerText = showGainers ? "Gainers" : "Losses";
-    document.getElementById("toggleButton").innerText = showGainers ? "Show Losses" : "Show Gainers";
+    document.getElementById("toggleButton").innerHTML = showGainers ? '<i class="fa-solid fa-chart-line"></i>' : '<i class="fa-solid fa-chart-line"></i> ';
     fetchFuturesData();
+}
+
+function startAutoShow() {
+    const coins = document.querySelectorAll(".coin-card");
+    if (coins.length === 0) return;
+
+    autoShowInterval = setInterval(() => {
+        if (currentIndex >= coins.length) {
+            currentIndex = 0;
+        }
+        const coinSymbol = coins[currentIndex].querySelector(".coin-name").innerText + "USDT";
+        openChart(coinSymbol);
+        currentIndex++;
+    }, 3200); // 3 seconds delay
+}
+
+function stopAutoShow() {
+    clearInterval(autoShowInterval);
+    autoShowInterval = null;
+    currentIndex = 0;
+}
+
+function toggleAutoShow() {
+    if (autoShowInterval) {
+        stopAutoShow();
+        document.getElementById("autoShowButton").innerHTML = '<i class="fa-solid fa-robot"></i>';
+    } else {
+        startAutoShow();
+        document.getElementById("autoShowButton").innerHTML = '<i class="fa-solid fa-robot"></i> ';
+    }
 }
 
 function openChart(symbol) {
@@ -358,6 +398,7 @@ function closeModal() {
 }
 
 document.getElementById("toggleButton").addEventListener("click", toggleData);
+document.getElementById("autoShowButton").addEventListener("click", toggleAutoShow);
 
 fetchFuturesData();
 setInterval(fetchFuturesData, 700);
@@ -371,6 +412,8 @@ window.addEventListener("keydown", (e) => {
 </script>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+
 
 </body>
 </html>
