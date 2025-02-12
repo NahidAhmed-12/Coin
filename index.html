@@ -227,7 +227,7 @@ async function fetchFuturesData() {
     loadingMessage.style.display = "block";
 
     const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject('Timeout'), 800)
+        setTimeout(() => reject('Timeout'), 1000)
     );
 
     try {
