@@ -16,6 +16,12 @@
             text-align: center;
             margin: 0;
             padding: 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            
+-webkit-tap-highlight-color: transparent;
         }
         h2 {
             color: #F0B90B;
@@ -23,7 +29,7 @@
         }
         .coin-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
             gap: 15px;
             max-width: 90%;
             margin: auto;
@@ -38,6 +44,7 @@
             box-shadow: 0px 4px 8px rgba(240, 185, 11, 0.15);
             position: relative;
             top:-55px;
+            
         }
         .coin-card:hover {
             background: #292929;
@@ -84,6 +91,13 @@
             transform: translate(-50%, -50%);
             display: none;
         }
+        
+        
+        
+        
+        
+        
+        
         .modal {
             display: flex;
             position: fixed;
@@ -128,22 +142,8 @@
             font-weight: bold;
             color: #FFFFFF;
         }
-        #fullScreenBtn {
-            position: absolute;
-            top: -10px;
-            right: 46px;
-            font-size: 15px;
-            cursor: pointer;
-            color: #F0B90B;
-            background: rgba(240, 185, 11, 0.2);
-            border-radius: 10%;
-            padding: 5px 10px;
-            transition: 0.2s ease;
-            border: none;
-        }
-        #fullScreenBtn:hover {
-            color: #00ffff;
-        }
+
+
         .close-btn {
             position: absolute;
             top: -10px;
@@ -160,9 +160,7 @@
             color: #ff3333;
             transform: scale(1.2);
         }
-        #tradingview-widget {
-            height: 250px;
-        }
+
         .modal.show .modal-content {
             transform: translateY(0);
         }
@@ -194,26 +192,38 @@
             color: #ff6666;
         }
         #touch-zone {
-            width: 77px;
-            height: 70px;
-            background: transparent;
-            color: white;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 18px;
-            position: relative;
-            outline: none;
-            bottom: 80px;
-            right:10px;
-            cursor: pointer;
-            text-align: center;
-            opacity: 0;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+width: 127px;
+height: 80px;
+background: transparent;
+color: white;
+align-items: center;
+justify-content: center;
+border-radius: 10px;
+font-size: 18px;
+position: relative;
+outline: none;
+bottom:150px;
+right:10px;
+cursor: pointer;
+text-align: center;
+opacity: 0.01;
+-webkit-tap-highlight-color: transparent;
+user-select: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+            
         }
+   
+        
+   #touch-zone:focus,
+   #touch-zone:active {
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none;
+}
+
         .search-modal {
             display: none;
             position: fixed;
@@ -310,11 +320,37 @@ color: #FFFFFF;
             font-size: 14.3px;
             color: #F0B90B;
         }
+        
+        
+        #fullScreenBtn {
+            position: absolute;
+            top: -10px;
+            right: 46px;
+            font-size: 15px;
+            cursor: pointer;
+            color: #F0B90B;
+            background: rgba(240, 185, 11, 0.2);
+            border-radius: 10%;
+            padding: 5px 10px;
+            transition: 0.2s ease;
+            border: none;
+        }
+        
+        #fullScreenBtn:hover {
+            color: #00ffff;
+        }
+        
+        #tradingview-widget {
+            height: 250px;
+        }
     </style>
 </head>
 <body>
 
-<h2>Futures <span style="color: #ff5733">Top</span> <span id="toggleText">Gainers</span> <br /> <span></span></h2>
+<h2 style="user-select: none;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;">Futures <span style="color: #ff5733">Top</span> <span id="toggleText">Gainers</span> <br /> <span></span></h2>
 
 <!-- Toggle Button -->
 <button style="padding: 10px 25px; gap: 15px;" class="toggle-button" id="toggleButton"><i class="fa-solid fa-chart-line"></i> </button>
@@ -330,6 +366,7 @@ color: #FFFFFF;
    </button>
 
 <div id="touch-zone"></div>
+
 
 <!-- Loading message -->
 <div id="loadingMessage">Loading...</div>
@@ -639,5 +676,30 @@ checkDataLoad();
 </script>
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
+
+<script>
+  // Pop-up Show
+function showModal() {
+    const modal = document.querySelector('.modal');
+    const modalContent = document.querySelector('.modal-content');
+    
+    modal.classList.add('show');
+    // Reset animation by forcing reflow
+    modalContent.style.transform = 'translateY(-10px)';
+    // Force reflow to reset animation
+    modalContent.offsetHeight;  // Access the offsetHeight property to force reflow
+    modalContent.style.transition = 'transform 0.1s ease-in-out';
+    modalContent.style.transform = 'translateY(0)';
+}
+
+// Pop-up Close
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    modal.classList.remove('show');
+}
+
+
+  
+</script>
 </body>
 </html>
