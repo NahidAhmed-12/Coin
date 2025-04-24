@@ -404,41 +404,7 @@ color: #FFFFFF;
     </div>
 </div>
 
-<script>
-  let showGainers = true;
-let autoShowInterval = null;
-let currentIndex = 0;
-let savedInterval = localStorage.getItem("widgetInterval") || "15";
-let tapCount = 0;
-let lastTapTime = 0;
-let tapTimeout;
-let dataLoaded = false;
-let allCoinsData = [];
-
-async function fetchFuturesData() {
-  const loadingMessage = document.getElementById("loadingMessage");
-  loadingMessage.style.display = "block";
-
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject('Timeout'), 700)
-  );
-
-  try {
-    const response = await Promise.race([
-            fetch("https://fapi.binance.com/fapi/v1/ticker/24hr"),
-            timeout
-        ]);
-    const data = await response.json();
-    allCoinsData = data.filter(coin => coin.symbol.endsWith("USDT"));
-
-    const filteredData = allCoinsData.filter(item =>
-      showGainers ?
-      parseFloat(item.priceChangePercent) >= 10 :
-      parseFloat(item.priceChangePercent) <= -10
-    ).sort((a, b) =>
-      showGainers ?
-      parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent) :
-      parseFloat(a.priceChangePercent) - parseFloat(b.priceChangePercent)
+priceChangePercent) - parseFloat(b.priceChangePercent)
     );
 
     const container = document.getElementById("gainersContainer");
